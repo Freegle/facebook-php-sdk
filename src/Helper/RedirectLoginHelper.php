@@ -191,6 +191,10 @@ class RedirectLoginHelper
 		// At minimum we need to remove the state param
 		$redirectUrl = UrlManipulator::removeParamsFromUrl($redirectUrl, ['state']);
 
+		// Hack for Freegle - we're running behind a proxy which has SSL termination but we still want to use https
+		// on the redirect URL otherwide Facebook doesn't work.
+		$redirectUrl = str_replace('http://', 'https://', $redirectUrl);
+
 		return $this->oAuth2Client->getAccessTokenFromCode($code, $redirectUrl);
 	}
 
